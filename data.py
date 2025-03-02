@@ -1,4 +1,3 @@
-from keys import aki, sak
 from color import c
 import pandas as pd
 import numpy as np
@@ -6,24 +5,26 @@ import boto3
 import json
 import os
 
-os.environ['AWS_ACCESS_KEY_ID'] = aki
-os.environ['AWS_SECRET_ACCESS_KEY'] = sak
-
 # # # # # # # # # # # # # # # # # simulation results # # # # # # # # # # # # # # ## 
 
-s3_resource = boto3.resource("s3")
+# s3_resource = boto3.resource("s3")
 
-get_object = s3_resource.Bucket("samplestats").Object("CTR_dashboard/cf_pc.json").get()
-cf_pc_dct = dict(json.loads(get_object['Body'].read()))
+# get_object = s3_resource.Bucket("samplestats").Object("CTR_dashboard/cf_pc.json").get()
+# cf_pc_dct = dict(json.loads(get_object['Body'].read()))
 
-get_object = s3_resource.Bucket("samplestats").Object("CTR_dashboard/cp_pc.json").get()
-cp_pc_dct = dict(json.loads(get_object['Body'].read()))
+# get_object = s3_resource.Bucket("samplestats").Object("CTR_dashboard/cp_pc.json").get()
+# cp_pc_dct = dict(json.loads(get_object['Body'].read()))
 
-get_object = s3_resource.Bucket("samplestats").Object("CTR_dashboard/cf_pd.json").get()
-cf_pd_dct = dict(json.loads(get_object['Body'].read()))
+# get_object = s3_resource.Bucket("samplestats").Object("CTR_dashboard/cf_pd.json").get()
+# cf_pd_dct = dict(json.loads(get_object['Body'].read()))
 
-get_object = s3_resource.Bucket("samplestats").Object("CTR_dashboard/cp_pd.json").get()
-cp_pd_dct = dict(json.loads(get_object['Body'].read()))
+# get_object = s3_resource.Bucket("samplestats").Object("CTR_dashboard/cp_pd.json").get()
+# cp_pd_dct = dict(json.loads(get_object['Body'].read()))
+
+cf_pc_dct = pd.read_json("https://raw.githubusercontent.com/ua-chjb/abtest_dashboard/refs/heads/main/assets/data/cf_pc.json")
+cp_pc_dct = pd.read_json("https://raw.githubusercontent.com/ua-chjb/abtest_dashboard/refs/heads/main/assets/data/cf_pd.json")
+cf_pd_dct = pd.read_json("https://raw.githubusercontent.com/ua-chjb/abtest_dashboard/refs/heads/main/assets/data/cp_pc.json")
+cp_pd_dct = pd.read_json("https://raw.githubusercontent.com/ua-chjb/abtest_dashboard/refs/heads/main/assets/data/cp_pd.json")
 
 runs = cf_pc_dct["runs"]
 stats_lst = cf_pc_dct["stats_lst"]
@@ -55,7 +56,9 @@ dct_lst = [cf_pc_dct, cp_pc_dct, cf_pd_dct, cp_pd_dct]
 
 # # # # # # # # # # # # # # # # # main dataframe, s3fs # # # # # # # # # # # # # # ## 
 
-df = pd.read_csv("s3://samplestats/CTR_dashboard/adclicks.csv")
+# df = pd.read_csv("s3://samplestats/CTR_dashboard/adclicks.csv")
+
+df = pd.read_csv("https://raw.githubusercontent.com/ua-chjb/abtest_dashboard/refs/heads/main/assets/data/adclicks.csv")
 
 cf_pc_mk = (df["campaign"] == "funny" ) & ( df["product"] == "classic" )
 cf_pd_mk = (df["campaign"] == "funny" ) & ( df["product"] == "diet" )
