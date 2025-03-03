@@ -1,9 +1,7 @@
 from color import c
 import pandas as pd
 import numpy as np
-import boto3
-import json
-import os
+import requests
 
 # # # # # # # # # # # # # # # # # simulation results # # # # # # # # # # # # # # ## 
 
@@ -21,10 +19,10 @@ import os
 # get_object = s3_resource.Bucket("samplestats").Object("CTR_dashboard/cp_pd.json").get()
 # cp_pd_dct = dict(json.loads(get_object['Body'].read()))
 
-cf_pc_dct = pd.read_json("https://raw.githubusercontent.com/ua-chjb/abtest_dashboard/refs/heads/main/assets/data/cf_pc.json")
-cp_pc_dct = pd.read_json("https://raw.githubusercontent.com/ua-chjb/abtest_dashboard/refs/heads/main/assets/data/cf_pd.json")
-cf_pd_dct = pd.read_json("https://raw.githubusercontent.com/ua-chjb/abtest_dashboard/refs/heads/main/assets/data/cp_pc.json")
-cp_pd_dct = pd.read_json("https://raw.githubusercontent.com/ua-chjb/abtest_dashboard/refs/heads/main/assets/data/cp_pd.json")
+cf_pc_dct = requests.get("https://raw.githubusercontent.com/ua-chjb/abtest_dashboard/refs/heads/main/assets/data/cf_pc.json").json()
+cp_pc_dct = requests.get("https://raw.githubusercontent.com/ua-chjb/abtest_dashboard/refs/heads/main/assets/data/cf_pd.json").json()
+cf_pd_dct = requests.get("https://raw.githubusercontent.com/ua-chjb/abtest_dashboard/refs/heads/main/assets/data/cp_pc.json").json()
+cp_pd_dct = requests.get("https://raw.githubusercontent.com/ua-chjb/abtest_dashboard/refs/heads/main/assets/data/cp_pd.json").json()
 
 runs = cf_pc_dct["runs"]
 stats_lst = cf_pc_dct["stats_lst"]
@@ -54,9 +52,7 @@ def summ_table(dct_lst):
 
 dct_lst = [cf_pc_dct, cp_pc_dct, cf_pd_dct, cp_pd_dct]
 
-# # # # # # # # # # # # # # # # # main dataframe, s3fs # # # # # # # # # # # # # # ## 
-
-# df = pd.read_csv("s3://samplestats/CTR_dashboard/adclicks.csv")
+# # # # # # # # # # # # # # # # # main dataframe # # # # # # # # # # # # # # ## 
 
 df = pd.read_csv("https://raw.githubusercontent.com/ua-chjb/abtest_dashboard/refs/heads/main/assets/data/adclicks.csv")
 
