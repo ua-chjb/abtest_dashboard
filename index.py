@@ -500,7 +500,7 @@ block3 = html.Div(
 comp_writing_conclusion = dmc.Card(
     [
         dmc.Text(
-            "Summary",
+            "Conclusion",
             fw=500,
             size="xs"
         ),
